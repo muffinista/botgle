@@ -4,7 +4,7 @@ require './solver'
 require './play'
 require 'oj'
 
-DURATION = 15 * 60
+DURATION = 8 * 60
 WARNING_TIME = 3 * 60
 
 class Array
@@ -72,7 +72,7 @@ class Game
     end
     
     elapsed = Time.now.to_i - @first_play_at.to_i
-    #STDERR.puts "TIME REMAINING #{elapsed} #{DURATION - elapsed}"
+    STDERR.puts "TIME REMAINING #{elapsed} #{DURATION - elapsed}"
     DURATION - elapsed
   end
 

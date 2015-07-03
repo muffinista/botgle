@@ -57,17 +57,19 @@ home_timeline do |tweet|
     prior_count = g.plays.count
 
     g.play_words(tweet.user.id, tries) do |words, score|
-      result = words.join(" ").upcase
-      reply "#USER# plays #{result} #{flair}", tweet
+      if ! words.empty?
+        result = words.join(" ").upcase
+        reply "#USER# plays #{result} #{flair}", tweet
 
-      if prior_count <= 0 && @manager.game.plays.count > 0
-        output = [
-          "The timer is started! #{DURATION / 60} minutes to play!",
-          g.board.to_s(g.style).to_full_width,
-          flair
-        ].join("\n")
-
-        tweet output
+        if prior_count <= 0 && @manager.game.plays.count > 0
+          output = [
+                    "The timer is started! #{DURATION / 60} minutes to play!",
+                    g.board.to_s(g.style).to_full_width,
+                    flair
+                   ].join("\n")
+          
+          tweet output
+        end
       end
     end
   }
@@ -125,8 +127,7 @@ def run_bot
           STDERR.puts @manager.game.inspect
         else
           STDERR.puts "#{@manager.state} #{Time.now} #{@manager.next_game_at}"
-        end
-        
+        end       
         
         # NOTE this block is only called if the state of the game has changed
         @manager.tick { |game, state|
