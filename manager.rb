@@ -105,6 +105,10 @@ class Manager
     @game_id = @game_id.to_i + 1
     @game = Game.new(@game_id)
 
+    if @season.nil?
+      start_new_season
+    end
+    
     @season.add_game(@game)
     
     save
