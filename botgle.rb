@@ -15,6 +15,10 @@ verbose
 
 Thread.abort_on_exception = true
 
+#tweets = client.user_timeline(count:200).collect(&:id)
+#client.destroy_status(tweets)
+#exit
+
 $mutex = Mutex.new
 @sleep_rate = 3
 @manager = Manager.new
