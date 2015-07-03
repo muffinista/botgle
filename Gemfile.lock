@@ -1,0 +1,60 @@
+GIT
+  remote: git://github.com/muffinista/chatterbot.git
+  revision: 5b7c002d3b231f199b17da3045000a059918151f
+  branch: 2.0.0
+  specs:
+    chatterbot (2.0.0)
+      colorize (>= 0.7.3)
+      launchy (>= 2.4.2)
+      oauth (>= 0.4.7)
+      twitter (= 5.8.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.3.8)
+    algorithms (0.6.1)
+    buftok (0.2.0)
+    colorize (0.7.7)
+    equalizer (0.0.11)
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
+    http (0.5.1)
+      http_parser.rb
+    http_parser.rb (0.6.0)
+    json (1.8.3)
+    launchy (2.4.3)
+      addressable (~> 2.3)
+    memoizable (0.4.2)
+      thread_safe (~> 0.3, >= 0.3.1)
+    multipart-post (2.0.0)
+    naught (1.0.0)
+    oauth (0.4.7)
+    oj (2.12.4)
+    simple_oauth (0.2.0)
+    thread_safe (0.3.5)
+    twitter (5.8.0)
+      addressable (~> 2.3)
+      buftok (~> 0.2.0)
+      equalizer (~> 0.0.9)
+      faraday (~> 0.9.0)
+      http (~> 0.5.0)
+      http_parser.rb (~> 0.6.0)
+      json (~> 1.8)
+      memoizable (~> 0.4.0)
+      naught (~> 1.0)
+      simple_oauth (~> 0.2.0)
+    twitter-text (1.12.0)
+      unf (~> 0.1.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  algorithms
+  chatterbot!
+  oj
+  twitter-text
