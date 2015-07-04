@@ -85,7 +85,7 @@ class Game
       p = Play.new(target, w)
 
       if try_play(p)
-        @first_play_at = Time.now.to_i if words.empty?
+        @first_play_at = Time.now.to_i if @plays.empty?
 
         words << w
         score += p.score
