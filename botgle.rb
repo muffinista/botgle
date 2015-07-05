@@ -103,6 +103,8 @@ def tweet_state(type)
     ].join("\n")
 
     tweet output
+
+    @game_state_tweet_at = Time.now.to_i
   elsif type == "lobby"
     @manager.pretty_scores(g).each { |t|
       tweet t
@@ -110,7 +112,7 @@ def tweet_state(type)
 
     # get and tweet winner   
 
-    tweet "Next game in #{Manager::GAME_WAIT_TIME / 60} minutes! #{flair}"
+    tweet "Next game in #{Manager::GAME_WAIT_TIME / 60 / 60} hours! #{flair}"
   end
 end
 
@@ -118,11 +120,19 @@ def flair
   Manager::FLAIR.sample
 end
 
+GAME_REMINDER_TIME = 60 * 60 * 2
+
 def run_bot
+  @game_state_tweet_at = Time.now.to_i
+
   STDERR.puts "run bot!"
   timer_thread = Thread.new {
     while(true) do
       begin
+
+        #
+        # output some debugging/tracking info
+        #
         if @manager.state == "active"
           STDERR.puts @manager.game.inspect
         else
@@ -138,11 +148,23 @@ def run_bot
           end
         }
 
-        if @manager.state == "active" && @manager.game.issue_warning?
-          @manager.game.warning_issued!
-          tweet "Warning! Just #{Game::WARNING_TIME / 60} minutes left\n#{@manager.game.board.to_s.to_full_width}\n#{flair}"
+        if @manager.state == "active"
+          if @manager.game.issue_warning?
+            @manager.game.warning_issued!
+            output = [
+              "Warning! Just #{Game::WARNING_TIME / 60} minutes left",
+              @manager.game.board.to_s.to_full_width,
+              flair,
+              ""
+            ].join("\n")
+
+            tweet output
+          elsif @manager.game.plays.count == 0 &&
+                Time.now.to_i - @game_state_tweet_at > GAME_REMINDER_TIME
+            tweet_state @manager.state
+          end
         end
-        
+
         sleep @sleep_rate
       rescue StandardError => e
         STDERR.puts "timer thread exception #{e.inspect}"
