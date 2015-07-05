@@ -92,12 +92,13 @@ def tweet_state(type)
     base = ["THE BOARD:\n\n",
             "Boggle Summons You:\n\n",
             "TIME FOR BOGGLE:\n\n",
+            "The mist clears. Time for Boggle\n\n",
             "You see a Boggle board in the distance:\n\n",
             "You awaken from a dream of eldritch horrors to find a game before you:\n\n"
            ].sample
 
     output = [
-      base.to_full_width,
+      base,
       g.board.to_s(g.style).to_full_width,
       "#{flair} #{flair} #{flair}"
     ].join("\n")
