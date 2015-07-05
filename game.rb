@@ -40,7 +40,6 @@ class Game
       @words = s.words
       @found_words = []
       @time_started_at = Time.now
-      @first_play_at = 0
       @plays = []
       @warning = false
       @style = @board.available_styles.sample
@@ -71,7 +70,7 @@ class Game
       return 1000
     end
     
-    elapsed = Time.now.to_i - @first_play_at.to_i
+    elapsed = Time.now.to_i - @plays.first.played_at.to_i
     STDERR.puts "TIME REMAINING #{elapsed} #{DURATION - elapsed}"
     DURATION - elapsed
   end
@@ -87,7 +86,6 @@ class Game
       if try_play(p)
         @plays << p
         @found_words << p.word
-        @first_play_at = Time.now.to_i if @plays.empty?
 
         words << w
         score += p.score
@@ -138,7 +136,6 @@ class Game
     @board = h["board"] && Board.new(letters:h["board"])
     @plays = h["plays"] || []
     @time_started_at = h["time_started_at"]
-    @first_play_at = h["first_play_at"]
     @warning = h["warning"] || false
     @style = h["style"] || @board.available_styles.sample
   end
@@ -149,7 +146,6 @@ class Game
       "words" => @words,
       "found_words" => @found_words,
       "time_started_at" => @time_started_at,
-      "first_play_at" => @first_play_at,
       "plays" => @plays,
       "warning" => @warning,
       "style" => @style

@@ -1,10 +1,12 @@
 class Play
   attr_accessor :player
   attr_accessor :word
-
+  attr_reader :played_at
+  
   def initialize(player, word)
     @player = player
     @word = word
+    @played_at = Time.now
   end
 
   def score
