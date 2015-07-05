@@ -85,6 +85,8 @@ class Game
       p = Play.new(target, w)
 
       if try_play(p)
+        @plays << p
+        @found_words << p.word
         @first_play_at = Time.now.to_i if @plays.empty?
 
         words << w
@@ -103,9 +105,6 @@ class Game
     STDERR.puts "trying to play #{play.word}"
     test = play.word.upcase
     if @words.has_word?(test) && ! @found_words.has_word?(test)
-      @plays << play
-      @found_words << play.word
-
       true
     else
       false
