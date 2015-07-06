@@ -58,6 +58,10 @@ class Manager
     end
   end
 
+  def last_game
+    Game.new(@game_id)
+  end
+  
   def load_users(src="users.json")
     @mutex.synchronize {
       file = File.read(src)

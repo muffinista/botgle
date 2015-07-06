@@ -86,9 +86,9 @@ end
 
 
 def tweet_state(type)
-  g = @manager.game
-
   if type == "active"
+    g = @manager.game
+
     base = ["THE BOARD:\n\n",
             "Boggle Summons You:\n\n",
             "TIME FOR BOGGLE:\n\n",
@@ -107,6 +107,8 @@ def tweet_state(type)
 
     @game_state_tweet_at = Time.now.to_i
   elsif type == "lobby"
+    g = @manager.last_game
+
     @manager.pretty_scores(g).each { |t|
       tweet t
     }
