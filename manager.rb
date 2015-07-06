@@ -81,7 +81,8 @@ class Manager
     puts "finishing the current game"
     @state = "lobby"
     @game.finish!
-
+    @game = nil
+    
     if @new_game_request == true
       @next_game_at = Time.now
     else
@@ -181,7 +182,7 @@ class Manager
     @game_id = h["game_id"]
     @season_id = h["season_id"]
 
-    if @game_id.to_i > 0
+    if @game_id.to_i > 0 && @state == "active"
       @game = Game.new(@game_id)
     end
     if @season_id.to_i > 0
