@@ -4,7 +4,7 @@ require './season'
 require 'twitter-text'
 
 class Manager
-  GAME_WAIT_TIME = 300 * 60
+  GAME_WAIT_TIME = 420 * 60
 
   FLAIR = [
     Twitter::Unicode::U1F3C6,
