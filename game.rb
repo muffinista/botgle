@@ -6,6 +6,7 @@ require 'oj'
 
 DURATION = 8 * 60
 WARNING_TIME = 3 * 60
+MIN_WORDS_ON_BOARD = 20
 
 class Array
   # basically a case-insensitive version of include?
@@ -32,12 +33,8 @@ class Game
     end
 
     if @board.nil?
-      @board = Board.new
+      @board, @words = generate_decent_board
 
-      trie = Marshal.load(File.read('./words.dict'))
-      s = Solver.new(trie)
-      s.solve(@board)
-      @words = s.words
       @found_words = []
       @time_started_at = Time.now
       @plays = []
@@ -46,6 +43,27 @@ class Game
     end
 
     save
+  end
+
+  def generate_decent_board
+    b = nil
+    w = nil
+    count = 0
+
+    while count < MIN_WORDS_ON_BOARD
+      STDERR.puts "Generating new board"
+      b = Board.new
+    
+      trie = Marshal.load(File.read('./words.dict'))
+      s = Solver.new(trie)
+      s.solve(b)
+      w = s.words
+
+      count = w.count
+      STDERR.puts "board has #{count} words"
+    end
+
+    return b, w
   end
   
   def filename
