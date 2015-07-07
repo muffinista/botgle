@@ -1,3 +1,4 @@
+# coding: utf-8
 class String
   def to_full_width
     offset = 65248
@@ -23,5 +24,14 @@ class String
     }
     output << line.dup
     output
+  end
+end
+
+class Time
+  def beginning_of_next_hour
+    now = self
+    now = now - (now.min) * 60
+    now = now - (now.sec)
+    now + 3600
   end
 end

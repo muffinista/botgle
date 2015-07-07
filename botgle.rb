@@ -78,9 +78,17 @@ end
 direct_messages do |tweet|
   puts "well, here i am #{tweet.text}"
   puts tweet.inspect
-  if tweet.text =~ /NEW GAME/
+  if tweet.text =~ /NEW GAME/ && tweet.sender.screen_name == "muffinista"
     @manager.trigger_new_game
     direct_message "got it #{Time.now.to_i}", tweet.sender
+  end
+
+  if tweet.text =~ /NOTIFY/
+    @manager.set_user_notify(tweet.sender, true)
+    direct_message "OK, I'll let you know when a game is coming up! #{flair}"
+  elsif tweet.text =~ /STOP/
+    @manager.set_user_notify(tweet.sender, false)
+    direct_message "OK, I'll stop annoying you about Botgle games #{flair}"
   end
 end
 
@@ -151,7 +159,21 @@ def run_bot
           end
         }
 
-        if @manager.state == "active"
+        if @manager.state == "lobby"
+          ten_minutes_before = @manager.next_game_at.to_i - (60*10)
+
+          if @manager.heads_up_issued == false && Time.now.to_i >= ten_minutes_before 
+            @manager.heads_up_issued = true
+            @manager.notifications.each { |n|
+              begin
+                direct_message "Hey! There's a new game of botgle coming soon! #{flair}", n
+              rescue StandardException => e
+                STDERR.puts e
+              end
+            }
+          end
+
+        elsif @manager.state == "active"
           if @manager.game.issue_warning?
             @manager.game.warning_issued!
             output = [

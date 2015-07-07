@@ -1,11 +1,13 @@
 require 'oj'
 require './game'
 require './season'
+require './utils'
+
 require 'twitter-text'
 
 class Manager
-  GAME_WAIT_TIME = 420 * 60
-
+  GAME_HOURS = [2, 8, 14, 20]
+  
   FLAIR = [
     Twitter::Unicode::U1F3C6,
     Twitter::Unicode::U1F4AF,
@@ -38,6 +40,8 @@ class Manager
   attr_reader :season
   attr_reader :users
   attr_reader :next_game_at
+
+  attr_accessor :heads_up_issued
   
   def initialize
     @state = "lobby"
@@ -46,8 +50,11 @@ class Manager
     @season_id = nil
 
     @users = {}
-
+    @notifications = []
+    
     @mutex = Mutex.new
+
+    @heads_up_issued = false
     
     if File.exist?("manager.json")
       load
@@ -80,6 +87,16 @@ class Manager
 
     @users
   end
+
+  def set_user_notify(user, notify=true)
+    if notify == true
+      @notifications << user.id unless @notifications.include?(user.id)
+    else
+      @notifications.delete(user.id)
+    end
+
+    save
+  end
   
   def finish_current_game
     puts "finishing the current game"
@@ -90,10 +107,19 @@ class Manager
     if @new_game_request == true
       @next_game_at = Time.now
     else
-      @next_game_at = Time.now + GAME_WAIT_TIME
+      @next_game_at = next_game_should_be_at
     end
 
     save
+  end
+
+  def next_game_should_be_at
+    t = Time.now.beginning_of_next_hour
+    while !GAME_HOURS.include?(t.hour)
+      t = t + (3600)
+    end
+
+    t
   end
 
   def trigger_new_game
@@ -185,7 +211,8 @@ class Manager
     @next_game_at = h["next_game_at"]
     @game_id = h["game_id"]
     @season_id = h["season_id"]
-
+    @notifications = h["notifications"] || []
+    
     if @game_id.to_i > 0 && @state == "active"
       @game = Game.new(@game_id)
     end
@@ -199,7 +226,8 @@ class Manager
       "state" => @state,
       "next_game_at" => @next_game_at,
       "game_id" => @game_id,
-      "season_id" => @season_id
+      "season_id" => @season_id,
+      "notifications" => @notifications
     }
     
     File.open(filename, "w") do |f|
