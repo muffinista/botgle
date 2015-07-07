@@ -40,7 +40,8 @@ class Manager
   attr_reader :season
   attr_reader :users
   attr_reader :next_game_at
-
+  attr_reader :notifications
+  
   attr_accessor :heads_up_issued
   
   def initialize
