@@ -27,6 +27,8 @@ STDERR.puts "Loaded Game:"
 STDERR.puts @manager.inspect
 
 
+GAME_REMINDER_TIME = 60 * 60 * 2
+
 streaming true
 
 followed do |user|
@@ -123,7 +125,9 @@ def tweet_state(type)
 
     # get and tweet winner   
 
-    tweet "Next game in #{Manager::GAME_WAIT_TIME / 60 / 60} hours! #{flair}"
+
+    diff = @manager.next_game_at.to_i - Time.now.to_i
+    tweet "Next game in #{(diff.to_f / 60 / 60).round.to_i} hours! #{flair}"
   end
 end
 
@@ -131,7 +135,7 @@ def flair
   Manager::FLAIR.sample
 end
 
-GAME_REMINDER_TIME = 60 * 60 * 2
+
 
 def run_bot
   @game_state_tweet_at = Time.now.to_i
@@ -164,6 +168,7 @@ def run_bot
 
           if @manager.heads_up_issued == false && Time.now.to_i >= ten_minutes_before 
             @manager.heads_up_issued = true
+            tweet "Hey there! Boggle in 10 minutes! #{flair}"
             @manager.notifications.each { |n|
               begin
                 direct_message "Hey! There's a new game of botgle coming soon! #{flair}", n
