@@ -109,6 +109,7 @@ class Manager
       @next_game_at = Time.now
     else
       @next_game_at = next_game_should_be_at
+      @heads_up_issued = false
     end
 
     save
