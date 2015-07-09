@@ -6,7 +6,7 @@ require 'oj'
 
 DURATION = 8 * 60
 WARNING_TIME = 3 * 60
-MIN_WORDS_ON_BOARD = 20
+MIN_WORDS_ON_BOARD = 35
 
 class Array
   # basically a case-insensitive version of include?
