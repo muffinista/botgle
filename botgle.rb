@@ -195,6 +195,7 @@ def run_bot
           end
         end
 
+        GC.start
         sleep @sleep_rate
       rescue StandardError => e
         STDERR.puts "timer thread exception #{e.inspect}"
