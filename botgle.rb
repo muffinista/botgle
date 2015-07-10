@@ -100,16 +100,17 @@ def tweet_state(type)
   if type == "active"
     g = @manager.game
 
-    base = ["THE BOARD:\n\n",
-            "Boggle Summons You:\n\n",
-            "TIME FOR BOGGLE:\n\n",
-            "The mist clears. Time for Boggle\n\n",
-            "You see a Boggle board in the distance:\n\n",
-            "You awaken from a dream of eldritch horrors to find a game before you:\n\n"
+    base = ["THE BOARD:",
+            "Boggle Summons You:",
+            "TIME FOR BOGGLE:",
+            "The mist clears. Time for Boggle:",
+            "You see a Boggle board in the distance:",
+            "You awaken from a dream of eldritch horrors to find a game before you:",
+            "The only thing blocking you from total victory is this Boggle board:"
            ].sample
 
     output = [
-      base,
+      "#{base}\n\n",     
       g.board.to_s(g.style).to_full_width,
       "#{flair} #{flair} #{flair}"
     ].join("\n")
@@ -172,7 +173,13 @@ def run_bot
             tweet "Hey there! Boggle in 10 minutes! #{flair}"
             @manager.notifications.each { |n|
               begin
-                direct_message "Hey! There's a new game of botgle coming soon! #{flair}", n
+                msg = [
+                  "Hey! There's a new game of botgle coming soon!",
+                  "Botgle in 10 minutes!",
+                  "BEWARE: Botgle starts in 10 minutes!",
+                  "**WARNING** a game of botgle is just 10 minutes away!"
+                ].sample
+                direct_message "#{msg} #{flair}", n
               rescue StandardException => e
                 STDERR.puts e
               end
