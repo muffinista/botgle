@@ -174,7 +174,7 @@ def run_bot
             @manager.notifications.each { |n|
               begin
                 msg = [
-                  "Hey! There's a new game of botgle coming soon!",
+                  "Hey! There's a new game of botgle in 10 minutes!",
                   "Botgle in 10 minutes!",
                   "BEWARE: Botgle starts in 10 minutes!",
                   "**WARNING** a game of botgle is just 10 minutes away!"
