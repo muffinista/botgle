@@ -46,7 +46,6 @@ home_timeline do |tweet|
     # don't play words if game isn't active
     next if ! @manager.active?
 
-    favorite tweet
     
     target = tweet.user.screen_name
 
@@ -60,6 +59,8 @@ home_timeline do |tweet|
 
     g.play_words(tweet.user.id, tries) do |words, score|
       if ! words.empty?
+        favorite tweet
+    
         result = words.join(" ").upcase
         reply "#USER# plays #{result} #{flair}", tweet
 
