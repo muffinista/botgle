@@ -106,7 +106,10 @@ def tweet_state(type)
             "The mist clears. Time for Boggle:",
             "You see a Boggle board in the distance:",
             "You awaken from a dream of eldritch horrors to find a game before you:",
-            "The only thing blocking you from total victory is this Boggle board:"
+            "The only thing blocking you from total victory is this Boggle board:",
+            "B-O-G-G-L-E",
+            "Above you a skywriter dances the path of a Boggle board",
+            "Your dreams are haunted by visions of Boggle"
            ].sample
 
     output = [
