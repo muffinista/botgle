@@ -95,7 +95,7 @@ class Board
   end
 
   def available_styles
-    letters.include?("Q") ? ["wide"] : ["wide", "compact"]
+    letters.include?("Qu") ? ["wide"] : ["wide", "compact"]
   end
   
   def to_s(style = "wide")
