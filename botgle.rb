@@ -198,7 +198,7 @@ def run_bot
             @manager.one_minute_warnings.each { |n|
               begin
                 msg = [
-                  "EMERGENCY!!! Boggle in ONE MINUTE"
+                  "EMERGENCY!!! Boggle in ONE MINUTE",
                   "Hey! Boggle starts in a minute!",
                   "BEWARE: Botgle starts in one minute!",
                   "**WARNING** a game of botgle is just ONE minute away!"
