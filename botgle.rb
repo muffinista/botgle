@@ -89,6 +89,9 @@ direct_messages do |tweet|
   if tweet.text =~ /^NOTIFY/i
     @manager.set_user_notify(tweet.sender, true)
     direct_message "OK, I'll let you know when a game is coming up! #{flair}"
+  if tweet.text =~ /^WARN/i
+    @manager.set_user_notify(tweet.sender, true, 1)
+    direct_message "OK, I'll let you know one minute before games start! #{flair}"
   elsif tweet.text =~ /^STOP/i
     @manager.set_user_notify(tweet.sender, false)
     direct_message "OK, I'll stop annoying you about Botgle games #{flair}"
@@ -170,7 +173,8 @@ def run_bot
 
         if @manager.state == "lobby"
           ten_minutes_before = @manager.next_game_at.to_i - (60*10)
-
+          one_minute_before = @manager.next_game_at.to_i - 60
+          
           if @manager.heads_up_issued == false && Time.now.to_i >= ten_minutes_before 
             @manager.heads_up_issued = true
             tweet "Hey there! Boggle in 10 minutes! #{flair}"
@@ -183,6 +187,23 @@ def run_bot
                   "**WARNING** a game of botgle is just 10 minutes away!"
                 ].sample
                 direct_message "#{msg} #{flair}", n
+              rescue StandardException => e
+                STDERR.puts e
+              end
+            }
+          end
+          
+          if @manager.one_minute_warning_issued == false && Time.now.to_i >= one_minute_before 
+            @manager.one_minute_warning_issued = true
+            @manager.one_minute_warnings.each { |n|
+              begin
+                msg = [
+                  "EMERGENCY!!! Boggle in ONE MINUTE"
+                  "Hey! Boggle starts in a minute!",
+                  "BEWARE: Botgle starts in one minute!",
+                  "**WARNING** a game of botgle is just ONE minute away!"
+                ].sample
+                direct_message "#{msg} #{flair} #{flair}", n
               rescue StandardException => e
                 STDERR.puts e
               end

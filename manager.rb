@@ -41,9 +41,11 @@ class Manager
   attr_reader :users
   attr_reader :next_game_at
   attr_reader :notifications
+  attr_reader :one_minute_warnings
   
   attr_accessor :heads_up_issued
-  
+  attr_accessor :one_minute_warning_issued
+
   def initialize
     @state = "lobby"
     @next_game_at = Time.now
@@ -52,11 +54,13 @@ class Manager
 
     @users = {}
     @notifications = []
+    @one_minute_warnings = []
     
     @mutex = Mutex.new
 
     @heads_up_issued = false
-    
+    @one_minute_warning_issued = false
+
     if File.exist?("manager.json")
       load
     end
@@ -89,11 +93,16 @@ class Manager
     @users
   end
 
-  def set_user_notify(user, notify=true)
+  def set_user_notify(user, notify=true, _when=10)
     if notify == true
-      @notifications << user.id unless @notifications.include?(user.id)
+      if _when == 10
+        @notifications << user.id unless @notifications.include?(user.id)
+      else
+        @one_minute_warnings << user.id unless @one_minute_warnings.include?(user.id)
+      end        
     else
       @notifications.delete(user.id)
+      @one_minute_warnings.delete(user.id)
     end
 
     save
@@ -110,6 +119,7 @@ class Manager
     else
       @next_game_at = next_game_should_be_at
       @heads_up_issued = false
+      @one_minute_warning_issued = false
     end
 
     save
@@ -214,6 +224,8 @@ class Manager
     @game_id = h["game_id"]
     @season_id = h["season_id"]
     @notifications = h["notifications"] || []
+    @one_minute_warnings = h["one_minute_warnings"] || []
+    
     
     if @game_id.to_i > 0 && @state == "active"
       @game = Game.new(@game_id)
@@ -229,7 +241,8 @@ class Manager
       "next_game_at" => @next_game_at,
       "game_id" => @game_id,
       "season_id" => @season_id,
-      "notifications" => @notifications
+      "notifications" => @notifications,
+      "one_minute_warnings" => @one_minute_warnings
     }
     
     File.open(filename, "w") do |f|
