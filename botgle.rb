@@ -89,7 +89,7 @@ direct_messages do |tweet|
   if tweet.text =~ /^NOTIFY/i
     @manager.set_user_notify(tweet.sender, true)
     direct_message "OK, I'll let you know when a game is coming up! #{flair}"
-  if tweet.text =~ /^WARN/i
+  elsif tweet.text =~ /^WARN/i
     @manager.set_user_notify(tweet.sender, true, 1)
     direct_message "OK, I'll let you know one minute before games start! #{flair}"
   elsif tweet.text =~ /^STOP/i
