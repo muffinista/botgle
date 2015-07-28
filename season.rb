@@ -32,6 +32,20 @@ class Season
     }
     result.sort_by { |k, v| -v }.to_h
   end
+
+  def game_winners
+    result = {}
+    @games.each { |id|
+      g = Game.new(id)
+      value = 1.0 / g.winners.count
+      g.winners.each { |p|
+        result[p] ||= 0
+        result[p] += value
+        result[p] = result[p].round(2)
+      }
+    }
+    result.sort_by { |k, v| -v }.to_h
+  end
   
   def add_game(g)
     @games << g.id

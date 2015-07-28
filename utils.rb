@@ -16,7 +16,6 @@ class String
     line = ""
     self.split(/\n/).each { |x|
       if ( (line + "\n" + x).size > 140 )
-        puts "hit limit"
         output << line.dup
         line = ""
       end

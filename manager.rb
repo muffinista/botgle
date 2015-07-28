@@ -192,6 +192,16 @@ class Manager
     "#{prefix}\n#{guts}".pretty_split
   end
 
+  def pretty_leaderboard(data, prefix="GAME OVER! SCORES:", limit=10, type="point")
+    guts = data.collect { |id, points|
+      name = @users[id] || id
+      word = points.to_i > 1 ? "#{type}s" : type
+      "@#{name}: #{points} #{FLAIR.sample}"
+    }.first(limit).join("\n")
+
+    "#{prefix}\n#{guts}".pretty_split
+  end
+  
   
   def tick
     do_yield = false

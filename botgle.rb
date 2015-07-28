@@ -26,8 +26,9 @@ $mutex = Mutex.new
 STDERR.puts "Loaded Game:"
 STDERR.puts @manager.inspect
 
-
 GAME_REMINDER_TIME = 60 * 60 * 2
+ADMIN_USERS = ["muffinista"]
+
 
 streaming true
 
@@ -81,21 +82,38 @@ end
 direct_messages do |tweet|
   puts "well, here i am #{tweet.text}"
   puts tweet.inspect
-  if tweet.text =~ /NEW GAME/ && tweet.sender.screen_name == "muffinista"
-    @manager.trigger_new_game
-    direct_message "got it #{Time.now.to_i}", tweet.sender
-  end
+  $mutex.synchronize {
+    if ADMIN_USERS.include? tweet.sender.screen_name
+      if tweet.text =~ /NEW GAME/
+        @manager.trigger_new_game
+        direct_message "got it #{Time.now.to_i}", tweet.sender
+      end
 
-  if tweet.text =~ /^NOTIFY/i
-    @manager.set_user_notify(tweet.sender, true)
-    direct_message "OK, I'll let you know when a game is coming up! #{flair}"
-  elsif tweet.text =~ /^WARN/i
-    @manager.set_user_notify(tweet.sender, true, 1)
-    direct_message "OK, I'll let you know one minute before games start! #{flair}"
-  elsif tweet.text =~ /^STOP/i
-    @manager.set_user_notify(tweet.sender, false)
-    direct_message "OK, I'll stop annoying you about Botgle games #{flair}"
-  end
+      if tweet.text =~ /LEADERBOARD/
+        s = @manager.season
+        data = s.leaderboard
+        @manager.pretty_leaderboard(data, "Season Point Totals:").each { |t|
+          tweet t
+        }
+      
+        data = s.game_winners
+        @manager.pretty_leaderboard(data, "Season Victories").each { |t|
+          tweet t
+        }
+      end
+    end
+    
+    if tweet.text =~ /^NOTIFY/i
+      @manager.set_user_notify(tweet.sender, true)
+      direct_message "OK, I'll let you know when a game is coming up! #{flair}"
+    elsif tweet.text =~ /^WARN/i
+      @manager.set_user_notify(tweet.sender, true, 1)
+      direct_message "OK, I'll let you know one minute before games start! #{flair}"
+    elsif tweet.text =~ /^STOP/i
+      @manager.set_user_notify(tweet.sender, false)
+      direct_message "OK, I'll stop annoying you about Botgle games #{flair}"
+    end
+  }
 end
 
 
