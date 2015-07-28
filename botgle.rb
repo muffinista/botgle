@@ -80,8 +80,8 @@ home_timeline do |tweet|
 end
 
 direct_messages do |tweet|
-  puts "well, here i am #{tweet.text}"
-  puts tweet.inspect
+  STDERR.puts "well, here i am #{tweet.sender.screen_name}: #{tweet.text}"
+  STDERR.puts tweet.inspect
   $mutex.synchronize {
     if ADMIN_USERS.include? tweet.sender.screen_name
       if tweet.text =~ /NEW GAME/
