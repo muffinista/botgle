@@ -46,7 +46,7 @@ home_timeline do |tweet|
 
     # don't play words if game isn't active
     next if ! @manager.active?
-
+    STDERR.puts "PLAY #{Time.now}\t#{tweet.user.screen_name}\t#{tweet.text}"
     
     target = tweet.user.screen_name
 
