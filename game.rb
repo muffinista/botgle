@@ -50,7 +50,13 @@ class Game
     w = nil
     count = 0
 
-    while count < MIN_WORDS_ON_BOARD
+    target = if rand > 0.7
+               MIN_WORDS_ON_BOARD * 1.35
+             else
+               MIN_WORDS_ON_BOARD      
+             end
+    
+    while count < target
       STDERR.puts "Generating new board"
       b = Board.new
     
