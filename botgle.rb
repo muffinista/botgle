@@ -83,6 +83,9 @@ direct_messages do |tweet|
   STDERR.puts "well, here i am #{tweet.sender.screen_name}: #{tweet.text}"
   STDERR.puts tweet.inspect
   $mutex.synchronize {
+    #
+    # command interface for admin users only
+    #
     if ADMIN_USERS.include? tweet.sender.screen_name
       if tweet.text =~ /NEW GAME/
         @manager.trigger_new_game
@@ -100,6 +103,11 @@ direct_messages do |tweet|
         @manager.pretty_leaderboard(data, "Season Victories").each { |t|
           tweet t
         }
+      end
+
+      if tweet.text =~ /NEW SEASON/
+        @manager.start_new_season
+        tweet "A new season begins.... now! #{flair}#{flair}#{flair}"
       end
     end
     
