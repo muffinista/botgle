@@ -39,13 +39,8 @@ end
 home_timeline do |tweet|
   $mutex.synchronize {
     STDERR.puts tweet.text
-    next if tweet.text !~ /^@botgle/i
+    next if tweet.text !~ /^@botgle/i || ! @manager.active?
 
-    # maybe we'll want to do stuff here
-
-
-    # don't play words if game isn't active
-    next if ! @manager.active?
     STDERR.puts "PLAY #{Time.now}\t#{tweet.user.screen_name}\t#{tweet.text}"
     
     target = tweet.user.screen_name
@@ -178,82 +173,83 @@ def run_bot
   timer_thread = Thread.new {
     while(true) do
       begin
+        $mutex.synchronize {
+          
+          #
+          # output some debugging/tracking info
+          #
+          if @manager.state == "active"
+            STDERR.puts @manager.game.inspect
+          else
+            STDERR.puts "#{@manager.state} #{Time.now} #{@manager.next_game_at}"
+          end       
+          
+          # NOTE this block is only called if the state of the game has changed
+          @manager.tick { |game, state|
+            STDERR.puts "Game state changed to #{@manager.state}"
 
-        #
-        # output some debugging/tracking info
-        #
-        if @manager.state == "active"
-          STDERR.puts @manager.game.inspect
-        else
-          STDERR.puts "#{@manager.state} #{Time.now} #{@manager.next_game_at}"
-        end       
-        
-        # NOTE this block is only called if the state of the game has changed
-        @manager.tick { |game, state|
-          STDERR.puts "Game state changed to #{@manager.state}"
+            if state == "active" || state == "lobby"
+              tweet_state @manager.state
+            end
+          }
 
-          if state == "active" || state == "lobby"
-            tweet_state @manager.state
+          if @manager.state == "lobby"
+            ten_minutes_before = @manager.next_game_at.to_i - (60*10)
+            one_minute_before = @manager.next_game_at.to_i - 60
+            
+            if @manager.heads_up_issued == false && Time.now.to_i >= ten_minutes_before 
+              @manager.heads_up_issued = true
+              tweet "Hey there! Boggle in 10 minutes! #{flair}"
+              @manager.notifications.each { |n|
+                begin
+                  msg = [
+                    "Hey! There's a new game of botgle in 10 minutes!",
+                    "Botgle in 10 minutes!",
+                    "BEWARE: Botgle starts in 10 minutes!",
+                    "**WARNING** a game of botgle is just 10 minutes away!"
+                  ].sample
+                  direct_message "#{msg} #{flair}", n
+                rescue StandardException => e
+                  STDERR.puts e
+                end
+              }
+            end
+            
+            if @manager.one_minute_warning_issued == false && Time.now.to_i >= one_minute_before 
+              @manager.one_minute_warning_issued = true
+              @manager.one_minute_warnings.each { |n|
+                begin
+                  msg = [
+                    "EMERGENCY!!! Boggle in ONE MINUTE",
+                    "Hey! Boggle starts in a minute!",
+                    "BEWARE: Botgle starts in one minute!",
+                    "**WARNING** a game of botgle is just ONE minute away!"
+                  ].sample
+                  direct_message "#{msg} #{flair} #{flair}", n
+                rescue StandardException => e
+                  STDERR.puts e
+                end
+              }
+            end
+
+          elsif @manager.state == "active"
+            if @manager.game.issue_warning?
+              @manager.game.warning_issued!
+              output = [
+                "Warning! Just #{Game::WARNING_TIME / 60} minutes left",
+                @manager.game.board.to_s.to_full_width,
+                flair,
+                ""
+              ].join("\n")
+
+              tweet output
+            elsif @manager.game.plays.count == 0 &&
+                  Time.now.to_i - @game_state_tweet_at > GAME_REMINDER_TIME
+              tweet_state @manager.state
+            end
           end
         }
-
-        if @manager.state == "lobby"
-          ten_minutes_before = @manager.next_game_at.to_i - (60*10)
-          one_minute_before = @manager.next_game_at.to_i - 60
-          
-          if @manager.heads_up_issued == false && Time.now.to_i >= ten_minutes_before 
-            @manager.heads_up_issued = true
-            tweet "Hey there! Boggle in 10 minutes! #{flair}"
-            @manager.notifications.each { |n|
-              begin
-                msg = [
-                  "Hey! There's a new game of botgle in 10 minutes!",
-                  "Botgle in 10 minutes!",
-                  "BEWARE: Botgle starts in 10 minutes!",
-                  "**WARNING** a game of botgle is just 10 minutes away!"
-                ].sample
-                direct_message "#{msg} #{flair}", n
-              rescue StandardException => e
-                STDERR.puts e
-              end
-            }
-          end
-          
-          if @manager.one_minute_warning_issued == false && Time.now.to_i >= one_minute_before 
-            @manager.one_minute_warning_issued = true
-            @manager.one_minute_warnings.each { |n|
-              begin
-                msg = [
-                  "EMERGENCY!!! Boggle in ONE MINUTE",
-                  "Hey! Boggle starts in a minute!",
-                  "BEWARE: Botgle starts in one minute!",
-                  "**WARNING** a game of botgle is just ONE minute away!"
-                ].sample
-                direct_message "#{msg} #{flair} #{flair}", n
-              rescue StandardException => e
-                STDERR.puts e
-              end
-            }
-          end
-
-        elsif @manager.state == "active"
-          if @manager.game.issue_warning?
-            @manager.game.warning_issued!
-            output = [
-              "Warning! Just #{Game::WARNING_TIME / 60} minutes left",
-              @manager.game.board.to_s.to_full_width,
-              flair,
-              ""
-            ].join("\n")
-
-            tweet output
-          elsif @manager.game.plays.count == 0 &&
-                Time.now.to_i - @game_state_tweet_at > GAME_REMINDER_TIME
-            tweet_state @manager.state
-          end
-        end
-
-        GC.start
+        
         sleep @sleep_rate
       rescue StandardError => e
         STDERR.puts "timer thread exception #{e.inspect}"
