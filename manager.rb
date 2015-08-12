@@ -31,7 +31,9 @@ class Manager
     Twitter::Unicode::U1F308,
     Twitter::Unicode::U1F38A,
     Twitter::Unicode::U1F47E,
-    Twitter::Unicode::U1F3B6
+    Twitter::Unicode::U1F3B6,
+    Twitter::Unicode::U1F3AF,
+    Twitter::Unicode::U1F3C1
   ]
 
   
