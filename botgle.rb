@@ -133,7 +133,10 @@ def tweet_state(type)
             "The only thing blocking you from total victory is this Boggle board:",
             "B-O-G-G-L-E",
             "Above you a skywriter dances the path of a Boggle board",
-            "Your dreams are haunted by visions of Boggle"
+            "Your dreams are haunted by visions of Boggle",
+            "I love you. Let's play:",
+            "Would you like to play a game of Boggle?",
+            "I hear you like to play Boggle"
            ].sample
 
     output = [
@@ -151,9 +154,6 @@ def tweet_state(type)
     @manager.pretty_scores(g).each { |t|
       tweet t
     }
-
-    # get and tweet winner   
-
 
     diff = @manager.next_game_at.to_i - Time.now.to_i
     tweet "Next game in #{(diff.to_f / 60 / 60).round.to_i} hours! #{flair}"
