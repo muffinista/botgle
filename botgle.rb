@@ -30,7 +30,7 @@ GAME_REMINDER_TIME = 60 * 60 * 2
 ADMIN_USERS = ["muffinista"]
 
 
-streaming true
+use_streaming true
 
 followed do |user|
   follow user
