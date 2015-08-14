@@ -255,7 +255,7 @@ class Manager
   def to_s3
     @season.to_s3
     
-    s3 = Aws::S3::Resource.new
+    s3 = Aws::S3::Resource.new(region:'us-east-1')
     bucket = s3.bucket('botgle')
     
     object = bucket.object("users.json")
