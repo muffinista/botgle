@@ -4,6 +4,8 @@ require './solver'
 require './play'
 require 'oj'
 
+require 'aws-sdk'
+
 DURATION = 8 * 60
 WARNING_TIME = 3 * 60
 MIN_WORDS_ON_BOARD = 35
@@ -77,6 +79,11 @@ class Game
   end
 
   def finish!
+    begin
+      to_s3
+    rescue
+      nil
+    end
   end
 
   def warning_issued!
@@ -164,8 +171,8 @@ class Game
     @style = h["style"] || @board.available_styles.sample
   end
 
-  def save
-    hash = {
+  def to_h
+    {
       "board" => @board.letters,
       "words" => @words,
       "found_words" => @found_words,
@@ -174,12 +181,22 @@ class Game
       "warning" => @warning,
       "style" => @style
     }
-
+  end
+  
+  def save
     File.open(filename, "w") do |f|
-      f.write(Oj.dump(hash))
+      f.write(Oj.dump(to_h))
     end
   end
 
+  def to_s3
+    s3 = Aws::S3::Resource.new
+    bucket = s3.bucket('botgle')
+    
+    object = bucket.object(filename)
+    object.put(body: Oj.dump(to_h), acl:'public-read')
+  end
+  
   class << self
     def create_dictionary(src, dest)
       trie = Trie.new

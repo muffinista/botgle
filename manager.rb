@@ -35,7 +35,6 @@ class Manager
     Twitter::Unicode::U1F3AF,
     Twitter::Unicode::U1F3C1
   ]
-
   
   attr_accessor :game
   attr_reader :state
@@ -122,6 +121,12 @@ class Manager
       @next_game_at = next_game_should_be_at
       @heads_up_issued = false
       @one_minute_warning_issued = false
+    end
+
+    begin
+      to_s3
+    rescue
+      nil
     end
 
     save
@@ -247,6 +252,17 @@ class Manager
     end
   end
 
+  def to_s3
+    @season.to_s3
+    
+    s3 = Aws::S3::Resource.new
+    bucket = s3.bucket('botgle')
+    
+    object = bucket.object("users.json")
+    object.put(body: Oj.dump(@users), acl:'public-read')
+  end
+
+  
   def save(filename="manager.json")
     hash = {
       "state" => @state,

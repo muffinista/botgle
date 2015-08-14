@@ -62,15 +62,25 @@ class Season
     @time_started_at = h["time_started_at"]
   end
 
-  def save
-    hash = {
+  def to_h
+    {
       "scores" => @scores,
       "games" => @games,
       "time_started_at" => @time_started_at
     }
+  end
 
+  def to_s3
+    s3 = Aws::S3::Resource.new
+    bucket = s3.bucket('botgle')
+    
+    object = bucket.object(filename)
+    object.put(body: Oj.dump(to_h), acl:'public-read')
+  end
+  
+  def save
     File.open(filename, "w") do |f|
-      f.write(Oj.dump(hash))
+      f.write(Oj.dump(to_h))
     end
   end
 end

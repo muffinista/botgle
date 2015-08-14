@@ -13,6 +13,12 @@ GEM
   specs:
     addressable (2.3.8)
     algorithms (0.6.1)
+    aws-sdk (2.1.14)
+      aws-sdk-resources (= 2.1.14)
+    aws-sdk-core (2.1.14)
+      jmespath (~> 1.0)
+    aws-sdk-resources (2.1.14)
+      aws-sdk-core (= 2.1.14)
     buftok (0.2.0)
     colorize (0.7.7)
     equalizer (0.0.11)
@@ -21,11 +27,14 @@ GEM
     http (0.6.4)
       http_parser.rb (~> 0.6.0)
     http_parser.rb (0.6.0)
+    jmespath (1.0.2)
+      multi_json (~> 1.0)
     json (1.8.3)
     launchy (2.4.3)
       addressable (~> 2.3)
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
+    multi_json (1.11.2)
     multipart-post (2.0.0)
     naught (1.0.0)
     oauth (0.4.7)
@@ -54,6 +63,7 @@ PLATFORMS
 
 DEPENDENCIES
   algorithms
+  aws-sdk
   chatterbot!
   oj
   twitter-text
