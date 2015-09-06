@@ -15,6 +15,11 @@ class Board
       @letters = opts[:letters]
     else   
       @letters = Board.distributions(@size, opts[:variant]).sort_by{ rand }.map { |d| d.sample }
+
+      # prevent 5x5 boards with Qu in them since we can't display it reliably on small displays
+      while @size > 4 && letters.include?("Qu")
+        @letters = Board.distributions(@size, opts[:variant]).sort_by{ rand }.map { |d| d.sample }
+      end
     end
     
     @board = []
@@ -87,7 +92,7 @@ class Board
     distros[size-min_size].map { |dist|
       dist.map { |die|
         die.split(//).map { |letter|
-          # our distrubutions return Qu, not Q's
+          # our distributions return Qu, not Q's
           letter == 'Q' ? 'Qu' : letter
         }
       }
@@ -95,6 +100,9 @@ class Board
   end
 
   def available_styles
+    if @size > 4
+      return ["compact"]
+    end
     letters.include?("Qu") ? ["wide"] : ["wide", "compact"]
   end
   

@@ -8,7 +8,7 @@ require 'aws-sdk'
 
 DURATION = 8 * 60
 WARNING_TIME = 3 * 60
-MIN_WORDS_ON_BOARD = 35
+MIN_WORDS_ON_BOARD = 45
 
 class Array
   # basically a case-insensitive version of include?
@@ -57,10 +57,13 @@ class Game
              else
                MIN_WORDS_ON_BOARD      
              end
+
+    size = rand > 0.8 ? 5 : 4
     
+
     while count < target
       STDERR.puts "Generating new board"
-      b = Board.new
+      b = Board.new(size: size)
     
       trie = Marshal.load(File.read('./words.dict'))
       s = Solver.new(trie)
