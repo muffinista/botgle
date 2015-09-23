@@ -236,11 +236,11 @@ def run_bot
             if @manager.game.issue_warning?
               @manager.game.warning_issued!
               output = [
-                "Warning! Just #{Game::WARNING_TIME / 60} minutes left",
-                @manager.game.board.to_s.to_full_width,
-                flair,
-                ""
-              ].join("\n")
+                        "Warning! Just #{Game::WARNING_TIME / 60} minutes left",
+                        @manager.game.board.to_s(@manager.game.style).to_full_width,
+                        flair,
+                        ""
+                       ].join("\n")
 
               tweet output
             elsif @manager.game.plays.count == 0 &&
