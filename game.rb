@@ -8,7 +8,7 @@ require 'aws-sdk'
 
 DURATION = 8 * 60
 WARNING_TIME = 3 * 60
-MIN_WORDS_ON_BOARD = 45
+MIN_WORDS_ON_BOARD = 65
 
 class Array
   # basically a case-insensitive version of include?
@@ -58,8 +58,8 @@ class Game
                MIN_WORDS_ON_BOARD      
              end
 
-    size = rand > 0.8 ? 5 : 4
-    
+    #size = rand > 0.8 ? 5 : 4
+    size = 4
 
     while count < target
       STDERR.puts "Generating new board"
