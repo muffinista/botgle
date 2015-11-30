@@ -38,7 +38,7 @@ end
 
 home_timeline do |tweet|
   $mutex.synchronize {
-    STDERR.puts tweet.text
+    #STDERR.puts tweet.text
     next if tweet.text !~ /^@botgle/i || ! @manager.active?
 
     STDERR.puts "PLAY #{Time.now}\t#{tweet.user.screen_name}\t#{tweet.text}"
