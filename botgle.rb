@@ -156,6 +156,17 @@ def tweet_state(type)
     }
 
     if ! Time.now.in_this_month?(@manager.next_game_at)
+        s = @manager.season
+        data = s.leaderboard
+        @manager.pretty_leaderboard(data, "Season Point Totals:").each { |t|
+          tweet t
+        }
+      
+        data = s.game_winners
+        @manager.pretty_leaderboard(data, "Season Victories").each { |t|
+          tweet t
+        }
+
       @manager.start_new_season
       tweet "A new season begins.... now! #{flair}#{flair}#{flair}"
     end
