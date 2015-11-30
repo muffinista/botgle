@@ -155,6 +155,11 @@ def tweet_state(type)
       tweet t
     }
 
+    if ! Time.now.in_this_month?(@manager.next_game_at)
+      @manager.start_new_season
+      tweet "A new season begins.... now! #{flair}#{flair}#{flair}"
+    end
+    
     diff = @manager.next_game_at.to_i - Time.now.to_i
     tweet "Next game in #{(diff.to_f / 60 / 60).round.to_i} hours! #{flair}"
   end

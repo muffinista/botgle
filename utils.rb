@@ -33,4 +33,8 @@ class Time
     now = now - (now.sec)
     now + 3600
   end
+
+  def in_this_month?(t)
+    self.month === t.month
+  end  
 end
