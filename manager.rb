@@ -9,38 +9,38 @@ class Manager
   GAME_HOURS = [3, 9, 15, 21]
   
   FLAIR = [
-    Twitter::Unicode::U1F385, # santa
-    Twitter::Unicode::U1F381, # gift
-    Twitter::Unicode::U2744, # snowflake
-    Twitter::Unicode::U1F384, # xmas tree
-    Twitter::Unicode::U2603, # snowman
-    Twitter::Unicode::U26C4 # snowman 2
+    #Twitter::Unicode::U1F385, # santa
+    #Twitter::Unicode::U1F381, # gift
+    #Twitter::Unicode::U2744, # snowflake
+    #Twitter::Unicode::U1F384, # xmas tree
+    #Twitter::Unicode::U2603, # snowman
+    #Twitter::Unicode::U26C4 # snowman 2
     
-    # Twitter::Unicode::U1F3C6,
-    # Twitter::Unicode::U1F4AF,
-    # Twitter::Unicode::U1F386,
-    # Twitter::Unicode::U1F387,
-    # Twitter::Unicode::U1F638,
-    # Twitter::Unicode::U1F38A,
-    # Twitter::Unicode::U1F48E,
-    # Twitter::Unicode::U1F380,
-    # Twitter::Unicode::U1F525,
-    # Twitter::Unicode::U2728,
-    # Twitter::Unicode::U1F4A5,
-    # Twitter::Unicode::U1F31F,
-    # Twitter::Unicode::U1F4AB,
-    # Twitter::Unicode::U1F680,
-    # Twitter::Unicode::U2668,
-    # Twitter::Unicode::U1F40C,
-    # Twitter::Unicode::U1F409,
-    # Twitter::Unicode::U1F432,
-    # Twitter::Unicode::U2600,
-    # Twitter::Unicode::U1F308,
-    # Twitter::Unicode::U1F38A,
-    # Twitter::Unicode::U1F47E,
-    # Twitter::Unicode::U1F3B6,
-    # Twitter::Unicode::U1F3AF,
-    # Twitter::Unicode::U1F3C1
+    Twitter::Unicode::U1F3C6,
+    Twitter::Unicode::U1F4AF,
+    Twitter::Unicode::U1F386,
+    Twitter::Unicode::U1F387,
+    Twitter::Unicode::U1F638,
+    Twitter::Unicode::U1F38A,
+    Twitter::Unicode::U1F48E,
+    Twitter::Unicode::U1F380,
+    Twitter::Unicode::U1F525,
+    Twitter::Unicode::U2728,
+    Twitter::Unicode::U1F4A5,
+    Twitter::Unicode::U1F31F,
+    Twitter::Unicode::U1F4AB,
+    Twitter::Unicode::U1F680,
+    Twitter::Unicode::U2668,
+    Twitter::Unicode::U1F40C,
+    Twitter::Unicode::U1F409,
+    Twitter::Unicode::U1F432,
+    Twitter::Unicode::U2600,
+    Twitter::Unicode::U1F308,
+    Twitter::Unicode::U1F38A,
+    Twitter::Unicode::U1F47E,
+    Twitter::Unicode::U1F3B6,
+    Twitter::Unicode::U1F3AF,
+    Twitter::Unicode::U1F3C1
   ]
   
   attr_accessor :game

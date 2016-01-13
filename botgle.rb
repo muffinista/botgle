@@ -226,6 +226,7 @@ def run_bot
                   ].sample
                   direct_message "#{msg} #{flair}", n
                 rescue StandardException => e
+                  STDERR.puts "OOOOPS"
                   STDERR.puts e
                 end
               }
