@@ -204,18 +204,8 @@ class Game
     def create_dictionary(src, dest)
       trie = Trie.new
       File.open(src).each_line do |line|
-        # idx = line.index " " # get first space
-        # if idx.nil? # no definition
-        #   word, defn = line, "no definition available"
-        # else
-        #   word, defn = line[0..idx-1], line[idx+1..line.size]
-        # end
-
         word = line.upcase.chomp
-        
-#        word.chomp! # case where we had just words on the line
-#        puts word
-        
+
         # skip words that are too small for boggle
         if word.size > 2
           trie[word] = word
@@ -225,7 +215,6 @@ class Game
       dump = Marshal.dump(trie)
       dict_file = File.new(dest, "w")      
 
-#      dict_file = Zlib::GzipWriter.new(dict_file)
       dict_file.write dump
       dict_file.close
     end
