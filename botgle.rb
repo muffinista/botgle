@@ -224,10 +224,11 @@ def run_bot
                     "BEWARE: Botgle starts in 10 minutes!",
                     "**WARNING** a game of botgle is just 10 minutes away!"
                   ].sample
+                  STDERR.puts "NOTIFY #{n} #{msg} #{flair}"
                   direct_message "#{msg} #{flair}", n
-                rescue StandardException => e
+                rescue StandardError => e
                   STDERR.puts "OOOOPS"
-                  STDERR.puts e
+                  STDERR.puts "NOTIFY #{e}"
                 end
               }
             end
@@ -242,9 +243,11 @@ def run_bot
                     "BEWARE: Botgle starts in one minute!",
                     "**WARNING** a game of botgle is just ONE minute away!"
                   ].sample
+                  STDERR.puts "NOTIFY #{n} #{msg} #{flair}"
                   direct_message "#{msg} #{flair} #{flair}", n
-                rescue StandardException => e
+                rescue StandardError => e
                   STDERR.puts e
+                  STDERR.puts "NOTIFY #{e}"
                 end
               }
             end
