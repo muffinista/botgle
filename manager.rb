@@ -6,7 +6,8 @@ require './utils'
 require 'twitter-text'
 
 class Manager
-  GAME_HOURS = [3, 9, 15, 21]
+  #GAME_HOURS = [3, 9, 15, 21]
+  GAME_HOURS = [2, 8, 14, 20]
   
   FLAIR = [
     #Twitter::Unicode::U1F385, # santa

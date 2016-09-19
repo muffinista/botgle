@@ -82,6 +82,10 @@ direct_messages do |tweet|
     # command interface for admin users only
     #
     if ADMIN_USERS.include? tweet.sender.screen_name
+      if tweet.text =~ /TWEET BOARD/
+        tweet_state("active")
+      end
+
       if tweet.text =~ /NEW GAME/
         @manager.trigger_new_game
         direct_message "got it #{Time.now.to_i}", tweet.sender
